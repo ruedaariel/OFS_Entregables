@@ -1,0 +1,67 @@
+* {
+
+background-color: rgb(16, 2, 59);
+
+}
+
+.tarjetas {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: start;
+    
+
+
+}
+
+.tarjetasModal{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: start;
+    
+
+
+}
+
+
+header {
+
+    margin-top: 10px;
+    width: 100%;
+    height: 20%;
+    background-color: rgb(16, 2, 59);
+
+
+}
+/* img{
+
+    width: 90%;
+    height: 90%;
+
+} */
+
+.card-title {
+
+color: rgb(255, 255, 255);
+
+}
+
+.card-text{
+
+    color: rgb(255, 255, 255);
+}
+
+h1{
+
+padding-top: 10px;
+padding-bottom: 10px;
+color: aliceblue;
+font-family: fantasy;
+
+}
+
