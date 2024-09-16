@@ -1,7 +1,6 @@
+"use strict";
 
-"use strict"
-
-// camino pra las imagenes
+// camino para las imagenes
 // https://image.tmdb.org/t/p/w500/
 
 //When looking at the image methods there is a new field called file_type that will show you the original version of the asset that was uploaded. For SVG's, you should call the original image size since we don't resize them. If you prefer to grab PNG's, you can call any size you wish just like normal.
@@ -32,24 +31,32 @@ vote_count:2705 */
 let contenedor = document.getElementById("tarjetas");
 
 const rutaImagen = "https://image.tmdb.org/t/p/original/";
-const peliculasPopulares = 'https://api.themoviedb.org/3/movie/popular?language=es&page=1';
-const peliculasMasValoradas = 'https://api.themoviedb.org/3/movie/top_rated?language=es&page=1';
-const peliculasPorLLegar = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
-const detalleDePelicula = 'https://api.themoviedb.org/3/movie/238?language=es';
-const peliculasTendencias = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US'
-
+const peliculasPopulares =
+  "https://api.themoviedb.org/3/movie/popular?language=es&page=1";
+const peliculasMasValoradas =
+  "https://api.themoviedb.org/3/movie/top_rated?language=es&page=1";
+const peliculasPorLLegar =
+  "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1";
+const detalleDePelicula =
+  "https://api.themoviedb.org/3/movie/533535?append_to_response=videos&language=en-US";
+const peliculasTendencias =
+  "https://api.themoviedb.org/3/trending/movie/day?language=en-US";
 
 // datos solicitados por la api para validadr el ingreso
 const options = {
-  method: 'GET',
+  method: "GET",
   headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZDU1MWE2Zjc1OWMwMmJhMzc5NDM5NmQxZTUxZWNiYiIsIm5iZiI6MTcyNTgzMDI3Mi42MDY2MjQsInN1YiI6IjY2ZGUxMWJiODEyYmY4MTgxMzM0NGMwZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TCLeqgLbjZQOlO9qMyiK9hB7dJnlTOUSyC3USjIjT-c'
-  }
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZDU1MWE2Zjc1OWMwMmJhMzc5NDM5NmQxZTUxZWNiYiIsIm5iZiI6MTcyNTgzMDI3Mi42MDY2MjQsInN1YiI6IjY2ZGUxMWJiODEyYmY4MTgxMzM0NGMwZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TCLeqgLbjZQOlO9qMyiK9hB7dJnlTOUSyC3USjIjT-c",
+  },
 };
 
 // selecciono todos lo botones de las tarjetas creadas
 const todosLosBotones = document.getElementsByClassName("peliculasBoton");
+const todosLosBotonesTrailer = document.getElementsByClassName(
+  "peliculasVideoBoton"
+);
 
 const populares = document.getElementById("populares");
 const valoradas = document.getElementById("valoradas");
@@ -62,89 +69,130 @@ cargarDatos(peliculasPopulares, options);
 // *****************************************************
 
 populares.addEventListener("click", function () {
-
-      let reseteoTitulo = document.getElementById("titulo");
-      reseteoTitulo.innerHTML=" Peliculas Populares ";
-      cargarDatos(peliculasPopulares,options);
-
-})
+  let reseteoTitulo = document.getElementById("titulo");
+  reseteoTitulo.innerHTML = " Peliculas Populares ";
+  cargarDatos(peliculasPopulares, options);
+});
 
 valoradas.addEventListener("click", function () {
-
   let reseteoTitulo = document.getElementById("titulo");
-      reseteoTitulo.innerHTML=" Peliculas Mas Valoradas ";
-  cargarDatos(peliculasMasValoradas,options);
-
-})
+  reseteoTitulo.innerHTML = " Peliculas Mas Valoradas ";
+  cargarDatos(peliculasMasValoradas, options);
+});
 
 porLlegar.addEventListener("click", function () {
-
   let reseteoTitulo = document.getElementById("titulo");
-      reseteoTitulo.innerHTML=" Peliculas por llegar ";
-  cargarDatos(peliculasPorLLegar,options);
+  reseteoTitulo.innerHTML = " Peliculas por llegar ";
+  cargarDatos(peliculasPorLLegar, options);
+});
 
-})
+// funcion pra consultar la API
+async function fetchDatos(url, options) {
+  const respuesta = await fetch(url, options);
 
+  return respuesta;
+}
 
-// funcion para pedir los datos a la API
+// funcion para traer los datos a la API
 async function cargarDatos(url, options) {
-  await fetch(url, options)
-    .then(response => response.json())
-    .then(response => {
+  try {
+    const datos = await fetchDatos(url, options);
+    //verifico si la respuesta es ok
+    if (datos.ok) {
+      //hubo respuesta del servidor promesa resuelta
+      const datosOk = await datos.json();
+      procesaData(datosOk.results);
+      creaEventosBotones(datosOk.results);
+    } else {
+      // hubo respuesta del servidor pero la respuesta no es valida
+      const errorDetectado = await datos.json();
+      console.log(errorDetectado.status_message);
+      let reseteoHTML = document.getElementById("tarjetas");
+      reseteoHTML.innerHTML = "";
+      let reseteoTitulo = document.getElementById("titulo");
+      reseteoTitulo.innerHTML = `Ha ocurrido un error del tipo: ${errorDetectado.status_message}`;
+            
 
-      console.log(response.status);
-      //console.log(response);
-      procesaData(response.results);
-      // crea los listenner del boton de cada tarjeta
-      creaEventosBotones(response.results);
-
-
-     })
-    .catch(error => console.log(error)); 
+    }
+  } catch (error) {
+    console.error("el error originado es: " + error.message);
+    //console.log("este es el error:" , typeof error.json());
+  }
 }
 
 // funcion que busca los datos de una pelicula en funcion del ID de la misma, que se lee en el click del boton +Info
 // crea la card con todos los datos de la pelicula y lo muestra en un modal
-async function cargarDatosPelicula(url, options) {
-  await fetch(url, options)
-    .then(response => response.json())
-    .then(response => {
+async function cargarDatosPelicula(url, options, datosOTrailer) {
+  try {
+    const datos = await fetchDatos(url, options);
+    //verifico si la respuesta es ok
+    if (datos.ok) {
+      //hubo respuesta del servidor promesa resuelta
+      const datosOk = await datos.json();
+      let videosTrailer = datosOk.videos.results;
+      console.log(datosOk.videos.results);
 
-      makeACardPelicula(response);
+      // si datosOTrailer es true solo se piden mostrar datos de pelicula
+      // si datosOTrailer es false se pide mostrar el trailer
+      if (datosOTrailer) {
+        makeACardPelicula(datosOk);
+      } else {
+        activarModalTrailer(videosTrailer);
+      }
+
+      makeACardPelicula(datosOk);
+    } else {
+      // hubo respuesta del servidor pero la respuesta no es valida
+      const errorDetectado = await datos.json();
+      console.log(errorDetectado.status_message);
+      let reseteoHTML = document.getElementById("tarjetas");
+      reseteoHTML.innerHTML = "";
+      let reseteoTitulo = document.getElementById("titulo");
+      reseteoTitulo.innerHTML = `Ha ocurrido un error del tipo: ${errorDetectado.status_message}`;
       
-
-    })
-    .catch(err => console.error(err));
+    }
+  } catch (error) {
+    console.error("el error originado es: " + error.message);
+  }
 }
 
-
-// funcion que asocia al boton de cada tarjeta un listener par luego buscar los datos
+// funcion que asocia al boton de cada tarjeta un listener para luego buscar los datos
 function creaEventosBotones(datos) {
-
-    for (let i = 0; i < datos.length; i++) {
-
-      todosLosBotones[i].addEventListener("click", function (e) {
-
+  for (let i = 0; i < datos.length; i++) {
+    todosLosBotones[i].addEventListener("click", function (e) {
       // leo el Id pra buscar la pelicula en la API
-          let indice = e.target.id;
-          //console.log(indice);
-          let url =`https://api.themoviedb.org/3/movie/${indice}?language=es`;
-          //console.log(url);
-          cargarDatosPelicula(url,options);
+      let indice = e.target.id;
+      console.log(indice);
+      //console.log(e.target.innerText);
+      let url = `https://api.themoviedb.org/3/movie/${indice}?append_to_response=videos&language=es`;
+      //'https://api.themoviedb.org/3/movie/533535?append_to_response=videos&language=en-US'
+      //console.log(url);
 
-    })
+      let datos = true;
+      cargarDatosPelicula(url, options, datos);
+    });
+
+    todosLosBotonesTrailer[i].addEventListener("click", function (e) {
+      // leo el Id pra buscar la pelicula en la API
+      let indice = e.target.id;
+      console.log(indice);
+      let url = `https://api.themoviedb.org/3/movie/${indice}?append_to_response=videos&language=es`;
+      //console.log(url);
+      //'https://api.themoviedb.org/3/movie/533535?append_to_response=videos&language=en-US'
+      //console.log(url);
+      let trailer = false;
+      cargarDatosPelicula(url, options, trailer);
+    });
   }
 }
 
 // funcion que procesa el arreglo de datos que llega desde la APU
 // y genera una tarjeta para cada una de las peliculas
 function procesaData(results) {
-
   let reseteoHTML = document.getElementById("tarjetas");
-  reseteoHTML.innerHTML="";
+  reseteoHTML.innerHTML = "";
 
   for (let i = 0; i < results.length; i++) {
-
     let original_title = results[i].original_title;
     let overview = results[i].overview;
     let release_date = results[i].release_date;
@@ -152,13 +200,29 @@ function procesaData(results) {
     let id = results[i].id;
 
     makeASimpleCard(original_title, campoImagen, release_date, id);
+  }
+}
 
+function activarModalTrailer(videos) {
+  let videoModal = document.getElementById("verTrailer");
+  videoModal.innerHTML = "";
+
+  if (videos.length == 0) {
+    videoModal.innerHTML = `<h1 id = "titulo" > No hay Trailer disponible </h1>"`;
+    return;
+  }
+
+  for (let i = 0; i < videos.length; i++) {
+    if (videos[i].type == "Trailer") {
+      //console.log(`-------> ${i} key :"` + videos[i].key)
+      videoModal.innerHTML = `<iframe  src="https://www.youtube.com/embed/${videos[i].key}" allow="autoplay" frameborder="1" allowfullscreen></iframe>`;
+      break;
+    }
   }
 }
 
 // genera un tarjeta con todos los datos de una pelicula
 function makeACard(datos) {
-
   /*<div class="card mb-3" style="max-width: 600px"> ***** div 1 ****
             <div class="row g-0"> ***** div 2 ******
               <div class="col-md-4"> **** div 3 *****
@@ -202,7 +266,7 @@ function makeACard(datos) {
   let divDos = document.createElement("div");
   divDos.setAttribute("class", "row g-0");
 
-  //<div class="col-md-4"> **** div 3 *****   
+  //<div class="col-md-4"> **** div 3 *****
   let divTres = document.createElement("div");
   divTres.setAttribute("class", "col-md-4");
 
@@ -237,14 +301,14 @@ function makeACard(datos) {
   //  <p class="card-text"> ***** p 1 ******
   let pUnoCard = document.createElement("p");
   pUnoCard.setAttribute("class", "card-text");
-  let pUnoCardTexto = document.createTextNode(`Estrenada en:  ${datos.release_date}`);
+  let pUnoCardTexto = document.createTextNode(
+    `Estrenada en:  ${datos.release_date}`
+  );
   pUnoCard.appendChild(pUnoCardTexto);
-
 
   divCinco.appendChild(h4Card);
   divCinco.appendChild(pCard);
   divCinco.appendChild(pUnoCard);
-
 
   divCuatro.appendChild(divCinco);
 
@@ -252,30 +316,26 @@ function makeACard(datos) {
   divDos.appendChild(divCuatro);
   divUno.appendChild(divDos);
 
-
   contenedor.appendChild(divUno);
 }
 
-
-
-// funcion que genra una tarjeta competa con todos los datos de una pelicula
+// funcion que genera una tarjeta competa con todos los datos de una pelicula
 // para mostrarlo en el modal
 function makeACardPelicula(datos) {
-
   let peliculaModal = document.getElementById("tarjetasModal");
-  peliculaModal.innerHTML="";
+  peliculaModal.innerHTML = "";
 
   // <div class="card mb-3" style="max-width: 600px"> ***** div 1 ******
 
   let divUno = document.createElement("div");
-  divUno.setAttribute("class", "card mb-3 h-7 w-75 p-2 m-3");
+  divUno.setAttribute("class", "card mb-3 h-7 w-75 p-2 m-3 " );
   //divUno.setAttribute("style", "max-width: 700px");
 
   // <div class="row g-0"> ***** div 2 ******
   let divDos = document.createElement("div");
-  divDos.setAttribute("class", "row g-0");
+  divDos.setAttribute("class", "row g-0 ");
 
-  //<div class="col-md-4"> **** div 3 *****   
+  //<div class="col-md-4"> **** div 3 *****
   let divTres = document.createElement("div");
   divTres.setAttribute("class", "col-md-4");
 
@@ -289,7 +349,7 @@ function makeACardPelicula(datos) {
 
   //<div class="col-md-8">  **** div 4 *****
   let divCuatro = document.createElement("div");
-  divCuatro.setAttribute("class", "col-md-8");
+  divCuatro.setAttribute("class", "col-md-8 ");
 
   //<div class="card-body"> **** div 5 *****
   let divCinco = document.createElement("div");
@@ -310,7 +370,9 @@ function makeACardPelicula(datos) {
   //  <p class="card-text"> ***** p 1 ******
   let pUnoCard = document.createElement("p");
   pUnoCard.setAttribute("class", "card-text");
-  let pUnoCardTexto = document.createTextNode(`Estrenada en:  ${datos.release_date}`);
+  let pUnoCardTexto = document.createTextNode(
+    `Estrenada en:  ${datos.release_date}`
+  );
   pUnoCard.appendChild(pUnoCardTexto);
 
   let pUnoCardHomePage = document.createElement("p");
@@ -320,29 +382,38 @@ function makeACardPelicula(datos) {
 
   let pUnoCardCompania = document.createElement("p");
   pUnoCardCompania.setAttribute("class", "card-text");
-  let pUnoCardTextoC = document.createTextNode(`Estudio: ${datos.production_companies[0].name}`);
+  let pUnoCardTextoC = document.createTextNode(
+    `Estudio: ${datos.production_companies[0].name}`
+  );
   pUnoCardCompania.appendChild(pUnoCardTextoC);
 
   let pUnoCardCountry = document.createElement("p");
   pUnoCardCountry.setAttribute("class", "card-text");
-  let pUnoCardTextoCountry = document.createTextNode(`Pais Origen: ${datos.origin_country[0]}`);
+  let pUnoCardTextoCountry = document.createTextNode(
+    `Pais Origen: ${datos.origin_country[0]}`
+  );
   pUnoCardCountry.appendChild(pUnoCardTextoCountry);
 
   let pUnoCardLengua = document.createElement("p");
   pUnoCardLengua.setAttribute("class", "card-text");
-  let pUnoCardTextolengua = document.createTextNode(`Idioma Original: ${datos.spoken_languages[0].name}`);
+  let pUnoCardTextolengua = document.createTextNode(
+    `Idioma Original: ${datos.spoken_languages[0].name}`
+  );
   pUnoCardLengua.appendChild(pUnoCardTextolengua);
 
   let pUnoCardValoracion = document.createElement("p");
   pUnoCardValoracion.setAttribute("class", "card-text");
-  let pUnoCardTextoValoracion = document.createTextNode(`Promedio Votación: ${datos.vote_average}`);
+  let pUnoCardTextoValoracion = document.createTextNode(
+    `Promedio Votación: ${datos.vote_average}`
+  );
   pUnoCardValoracion.appendChild(pUnoCardTextoValoracion);
 
   let pUnoCardDuracion = document.createElement("p");
   pUnoCardDuracion.setAttribute("class", "card-text");
-  let pUnoCardTextoDuracion = document.createTextNode(`Duración: ${datos.runtime} minutos`);
+  let pUnoCardTextoDuracion = document.createTextNode(
+    `Duración: ${datos.runtime} minutos`
+  );
   pUnoCardDuracion.appendChild(pUnoCardTextoDuracion);
-
 
   divCinco.appendChild(h4Card);
   divCinco.appendChild(pCard);
@@ -354,25 +425,20 @@ function makeACardPelicula(datos) {
   divCinco.appendChild(pUnoCardDuracion);
   divCinco.appendChild(pUnoCardValoracion);
 
-
   divCuatro.appendChild(divCinco);
 
   divDos.appendChild(divTres);
   divDos.appendChild(divCuatro);
   divUno.appendChild(divDos);
 
-
   peliculaModal.appendChild(divUno);
-
 }
-
 
 // funcion que realiza una tarjeta simple, la que se muestra en pantalla
 function makeASimpleCard(original_title, campoImagen, release_date, id) {
-
   //div class="card" style="width: 18rem;"> **** div 1
   let divUno = document.createElement("div");
-  divUno.setAttribute("class", "card m-2 p-1 h-10 ");
+  divUno.setAttribute("class", "card m-2 p-1 h-10 cardColor");
   divUno.setAttribute("style", "width: 22rem");
   // divUno.setAttribute("style","height: 600px");
 
@@ -408,7 +474,16 @@ function makeASimpleCard(original_title, campoImagen, release_date, id) {
   let textBotonInfo = document.createTextNode("+ Info");
   btnInfo.appendChild(textBotonInfo);
 
+  let btnInfoV = document.createElement("button");
+  btnInfoV.setAttribute("id", `${id}`);
+  btnInfoV.setAttribute("class", "btn btn-primary peliculasVideoBoton");
+  btnInfoV.setAttribute("data-bs-toggle", "modal");
+  btnInfoV.setAttribute("data-bs-target", "#modalTrailerPelicula");
+  let textBotonInfoV = document.createTextNode("Ver Trailer");
+  btnInfoV.appendChild(textBotonInfoV);
+
   divBtn.appendChild(btnInfo);
+  divBtn.appendChild(btnInfoV);
 
   divDos.appendChild(h4Card);
   divDos.appendChild(divBtn);
@@ -418,4 +493,3 @@ function makeASimpleCard(original_title, campoImagen, release_date, id) {
 
   contenedor.appendChild(divUno);
 }
-
