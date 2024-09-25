@@ -2,13 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Automovil = void 0;
 var Automovil = /** @class */ (function () {
-    function Automovil(patente, marca, modelo, anio) {
+    function Automovil(patente, marca, modelo, anio, titular) {
         this.titular = "";
         this.historico = [];
         this.patente = patente;
         this.marca = marca;
         this.modelo = modelo;
         this.anio = anio;
+        this.titular = titular;
         this.activo = true;
     }
     Automovil.prototype.getPatente = function () {

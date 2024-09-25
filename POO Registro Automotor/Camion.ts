@@ -9,13 +9,14 @@ export class Camion {
     private activo: boolean = false;
 
 
-    public constructor (patente:string, marca:string, modelo:string, anio:number){
+    public constructor (patente:string, marca:string, modelo:string, anio:number, titular:string){
 
         
         this.patente = patente;
         this.marca = marca;
         this.modelo = modelo;
         this.anio = anio;
+        this.titular = titular
         this.activo = true;
 
     }

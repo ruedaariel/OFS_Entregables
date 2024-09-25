@@ -2,6 +2,8 @@ import { Automovil } from "./Automovil";
 import { Motocicleta } from "./Motocicleta";
 import { Camion } from "./Camion";
 
+import "colors";
+
 export class RAutomotor {
 
     private numero : string;
@@ -32,11 +34,36 @@ public getCiudad ():  string {
 // muestra el listado de los autos activos preguntado por el getActivo
 public getListadoAutos(): void {
 
+    // devuelve listado de autos activos
      this.autos.forEach(auto => {
+                
+        if (auto.getActivo()) { 
+            
+            console.log("| " + this.igualoCadena(auto.getPatente(),11) +
+                        "| " + this.igualoCadena(auto.getMarca(),13) +
+                        "| " + this.igualoCadena(auto.getModelo(),13) +
+                        "| " + this.igualoCadena(auto.getAnio().toString(),7) + "|");
+        }
+            //console.log(auto.getPatente())}
         
-        // si dejo esta linea da error la ejecución
-        if (auto.getActivo()) { console.log(auto)}
-        console.log(auto);
+     });
+
+}
+
+// muestra el listado de los autos preguntado por el getActivo
+public getListadoAutosBaja(): void {
+
+    // devuelve listado de autos dados de baja
+     this.autos.forEach(auto => {
+                
+        if (!auto.getActivo()) { 
+            
+            console.log("| " + this.igualoCadena(auto.getPatente(),11) +
+                        "| " + this.igualoCadena(auto.getMarca(),13) +
+                        "| " + this.igualoCadena(auto.getModelo(),13) +
+                        "| " + this.igualoCadena(auto.getAnio().toString(),7) + "|");
+                    }
+        
      });
 
 }
@@ -71,6 +98,15 @@ private buscaAuto (autoABuscar : Automovil) : boolean{
     return true;
 }
 
+private igualoCadena (cadena: string, largo:number) : string {
+
+    let largoCadena = cadena.length;
+
+    let cadenaNormalizada = cadena.padEnd(largo, " ");
+    
+    return cadenaNormalizada;
+
+}
 
 
 

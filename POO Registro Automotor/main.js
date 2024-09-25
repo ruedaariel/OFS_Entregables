@@ -1,35 +1,57 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Automovil_1 = require("./Automovil");
-var readline_sync_1 = require("readline-sync");
-//import colors from "colors";
-var auto = new Automovil_1.Automovil("AE228EW", "Volkswagen", "Tiguan", 2020);
-var formatoPatente = /[A-Z]{2}[0-9]{3}[A-Z]{2}/;
-var anioActual = new Date().getFullYear();
-//if(!formatoPatente.test(patente) || anio < 1800 || anio > anioActual) { return false};
-if (ingresaDatosAuto()) {
-    console.log("exito");
-}
-else {
-    console.log("fracaso");
-}
-console.log(auto.getPatente());
-function ingresaDatosAuto() {
-    // solicita entrada de los datos del auto a ingresar y valida las entradas
-    var formatoPatente = /[A-Z]{2}[0-9]{3}[A-Z]{2}/;
-    var anioActual = new Date().getFullYear();
-    var patenteAuto;
-    var marcaAuto;
-    var modeloAuto;
-    var anioAuto;
-    patenteAuto = readline_sync_1.default.question("Ingrese la patente del auto: ");
-    marcaAuto = readline_sync_1.default.question("Ingrese la marca del auto:");
-    modeloAuto = readline_sync_1.default.question("Ingrese el modelo del auto:");
-    anioAuto = readline_sync_1.default.questionInt("Ingrese el anio de fabricación:");
-    if (!formatoPatente.test(patenteAuto) || anioAuto < 1800 || anioAuto > anioActual) {
-        console.log("los datos ingresados no son válidos");
-        return false;
-    }
-    var nuevoAuto = new Automovil_1.Automovil(patenteAuto, marcaAuto, modeloAuto, anioAuto);
-    return true;
-}
+var Motocicleta_1 = require("./Motocicleta");
+var Camion_1 = require("./Camion");
+var RegistroAutomotor_1 = require("./RegistroAutomotor");
+require("colors");
+var auto = new Automovil_1.Automovil("AE228EW", "Volkswagen", "Tiguan", 2020, "Juan Perez");
+var auto1 = new Automovil_1.Automovil("AB748EW", "Renault", "Kangoo", 2019, "Pedro Gomez");
+var auto2 = new Automovil_1.Automovil("AE324QV", "Volkswagen", "Vento", 2016, "Ariel Rueda");
+var moto = new Motocicleta_1.Motocicleta("A228EWZ", "Honda", "Gaucha", 2020, "Francisco Perez");
+var camion = new Camion_1.Camion("AF228AK", "Volvo", "FH", 2020, "Pedro Camionero");
+var RAutomotorNro2 = new RegistroAutomotor_1.RAutomotor("2", "Olavarria");
+//console.log(RAutomotorNro2.getCiudad());
+console.clear();
+console.log(" ");
+console.log(" ");
+console.log("*********************************************".bgCyan);
+console.log("****   Prueba de métodos de los objetos   ***".bgCyan);
+console.log("*********************************************".bgCyan);
+console.log(" ");
+console.log(" ");
+console.log("****   Prueba de métodos de los objetos Auto  ***".cyan);
+console.log(" metodos => auto.getMarca() - auto.getModelo() - auto.getPatente ");
+console.log("La patente del auto marca ".concat(auto.getMarca().yellow, " y modelo ").concat(auto.getModelo().yellow, " es: ").concat(auto.getPatente().green));
+console.log("La marca del auto con patente ".concat(auto.getPatente().yellow, " es: ").concat(auto.getMarca().green));
+console.log(" ");
+console.log("****   Prueba de métodos de Registro automotor   ***".cyan);
+console.log(" ");
+console.log("*** Metodo para conocer datos del registro Automotor ***".red);
+console.log(" metodos => RAutomotor.getNro() - RAutomotor.getCiudad() ");
+console.log("El registro automotor Nro. ".concat(RAutomotorNro2.getNro().yellow, " de la ciudad de ").concat(RAutomotorNro2.getCiudad().yellow, " lleva la gestion de estos vehiculos"));
+console.log(" ");
+console.log("*** Metodo alta de vehiculo en registro Automotor ***".red);
+console.log(" metodos => RAutomotor.getSetAltaAuto (Auto) devuelve True (exito) False(fracaso)");
+console.log("El resultado de dar de alta el auto de patente ".concat(auto.getPatente().yellow, " fue ") + "".concat(RAutomotorNro2.setAltaAuto(auto)).blue + " se dio de alta");
+console.log("El resultado de dar de alta el auto de patente ".concat(auto1.getPatente().yellow, " fue ") + "".concat(RAutomotorNro2.setAltaAuto(auto1)).blue + " se dio de alta");
+console.log("El resultado de dar de alta el auto de patente ".concat(auto2.getPatente().yellow, " fue ") + "".concat(RAutomotorNro2.setAltaAuto(auto2)).blue + " se dio de alta");
+console.log("El resultado de dar de alta el auto de patente ".concat(auto1.getPatente().yellow, " ya existente fue ") + "".concat(RAutomotorNro2.setAltaAuto(auto1)).red + "  no se dio de alta");
+console.log(" ");
+console.log("*** Metodo listado de vehiculos en registro Automotor ***".red);
+console.log("| Patente    | Marca        | Modelo       | Anio   |".cyan);
+RAutomotorNro2.getListadoAutos(); // listado de autos activos
+console.log(" ");
+console.log("*** Metodo baja de vehiculo en registro Automotor establece atributo en False ***".red);
+console.log(" metodos => RAutomotor.getBajaAuto(Auto) devuelve True (exito) False(fracaso)");
+console.log("El resultado de dar de baja el auto de patente ".concat(auto1.getPatente().yellow, " fue ") + "".concat(RAutomotorNro2.setBajaAuto(auto1)).blue + " se dio de baja");
+console.log("Compruebo el atributo Activo del veh\u00EDculo ".concat(auto1.getPatente().yellow, " dado de baja y el estado es ") + "".concat(auto1.getActivo().toString().blue));
+console.log(" ");
+console.log("*** Ejecutamos nuevamente RAutomotorNro2.getListadoAutos() para verificar la baja  ***".red);
+console.log("| Patente    | Marca        | Modelo       | Anio   |".cyan);
+RAutomotorNro2.getListadoAutos(); // listado de autos activos
+console.log(" ");
+console.log("*** Metodo RAutomotorNro2.getListadoBajaAutos() para listar los dados de baja  ***".red);
+console.log("| Patente    | Marca        | Modelo       | Anio   |".cyan);
+RAutomotorNro2.getListadoAutosBaja(); // listado de autos inactivos
+console.log(" ");

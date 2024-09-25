@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "@colors/colors": "^1.6.0",
+    "colors": "^1.4.0",
     "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.2"
   }
 }
