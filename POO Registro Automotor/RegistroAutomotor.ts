@@ -35,10 +35,9 @@ public getListadoAutos(): void {
      this.autos.forEach(auto => {
         
         // si dejo esta linea da error la ejecución
-        //if (auto.getActivo()) { console.log(auto)}
+        if (auto.getActivo()) { console.log(auto)}
         console.log(auto);
      });
-
 
 }
 
@@ -53,6 +52,17 @@ public setAltaAuto (altaAuto : Automovil): boolean{
     if (this.buscaAuto(altaAuto)) { return false;}
     else {this.autos.push(altaAuto); return true;}
 }
+
+public setBajaAuto (bajaAuto : Automovil): boolean{
+
+    // verifico que el auto a dar baja exista en la lista de autos gestionados
+    // si existe retorno true con la baja hecha para control
+    // si no existe retorno false para control
+        if (!this.buscaAuto(bajaAuto)) { return false;}
+        else {bajaAuto.setActivo(); return true;}
+    }
+
+
 
 private buscaAuto (autoABuscar : Automovil) : boolean{
 

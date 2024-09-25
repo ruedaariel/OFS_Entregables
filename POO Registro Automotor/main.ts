@@ -25,4 +25,8 @@ console.log(RAutomotorNro2.getCiudad());
 console.log(RAutomotorNro2.setAltaAuto(auto));
 console.log(RAutomotorNro2.setAltaAuto(auto1));
 console.log(RAutomotorNro2.setAltaAuto(auto)); // este está duplicado y la logica no lo incluye
+console.log("----------------------------");
 RAutomotorNro2.getListadoAutos(); // listado de autos activos
+ console.log(RAutomotorNro2.setBajaAuto(auto1));
+ console.log("----------------------------")
+ RAutomotorNro2.getListadoAutos(); // listado de autos activos

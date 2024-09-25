@@ -50,4 +50,9 @@ export class Automovil {
     public getActivo(): boolean {
         return this.activo;
     }
+
+    public setActivo(): void {
+        // niega la condicion de activo true va a false y false va a true
+        this.activo = !this.activo;
+    }
 }
