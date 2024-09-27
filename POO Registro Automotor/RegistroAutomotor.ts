@@ -31,40 +31,24 @@ public getCiudad ():  string {
     return this.ciudad;
 }
 
-// muestra el listado de los autos activos preguntado por el getActivo
-public getListadoAutos(): void {
+// devuelve una copia del arreglo de todos los autos del registro
+public getAutos (activo:boolean): Automovil[]{
 
-    // devuelve listado de autos activos
-     this.autos.forEach(auto => {
-                
-        if (auto.getActivo()) { 
-            
-            console.log("| " + this.igualoCadena(auto.getPatente(),11) +
-                        "| " + this.igualoCadena(auto.getMarca(),13) +
-                        "| " + this.igualoCadena(auto.getModelo(),13) +
-                        "| " + this.igualoCadena(auto.getAnio().toString(),7) + "|");
-        }
-            //console.log(auto.getPatente())}
-        
-     });
+    return this.autos.filter(auto => (auto.getActivo() == activo));
 
 }
 
-// muestra el listado de los autos preguntado por el getActivo
-public getListadoAutosBaja(): void {
+public getAuto (patente: string): Automovil []{
 
-    // devuelve listado de autos dados de baja
-     this.autos.forEach(auto => {
-                
-        if (!auto.getActivo()) { 
-            
-            console.log("| " + this.igualoCadena(auto.getPatente(),11) +
-                        "| " + this.igualoCadena(auto.getMarca(),13) +
-                        "| " + this.igualoCadena(auto.getModelo(),13) +
-                        "| " + this.igualoCadena(auto.getAnio().toString(),7) + "|");
-                    }
-        
-     });
+    return this.autos.filter(auto => (auto.getPatente() === patente ));
+
+}
+
+public getTransfiereAuto(patente: string,titularActual: string,titularFuturo: string): void {
+
+       let autoATransferir = this.getAuto(patente);
+       
+      autoATransferir[0].setHistorico(titularActual,titularFuturo);      // transfiero datos al historico del auto
 
 }
 
@@ -90,7 +74,6 @@ public setBajaAuto (bajaAuto : Automovil): boolean{
     }
 
 
-
 private buscaAuto (autoABuscar : Automovil) : boolean{
 
     if ( this.autos.indexOf(autoABuscar) == -1) { return false;}
@@ -98,15 +81,7 @@ private buscaAuto (autoABuscar : Automovil) : boolean{
     return true;
 }
 
-private igualoCadena (cadena: string, largo:number) : string {
 
-    let largoCadena = cadena.length;
-
-    let cadenaNormalizada = cadena.padEnd(largo, " ");
-    
-    return cadenaNormalizada;
-
-}
 
 
 

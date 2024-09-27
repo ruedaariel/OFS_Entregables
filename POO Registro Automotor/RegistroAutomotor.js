@@ -16,32 +16,16 @@ var RAutomotor = /** @class */ (function () {
     RAutomotor.prototype.getCiudad = function () {
         return this.ciudad;
     };
-    // muestra el listado de los autos activos preguntado por el getActivo
-    RAutomotor.prototype.getListadoAutos = function () {
-        var _this = this;
-        // devuelve listado de autos activos
-        this.autos.forEach(function (auto) {
-            if (auto.getActivo()) {
-                console.log("| " + _this.igualoCadena(auto.getPatente(), 11) +
-                    "| " + _this.igualoCadena(auto.getMarca(), 13) +
-                    "| " + _this.igualoCadena(auto.getModelo(), 13) +
-                    "| " + _this.igualoCadena(auto.getAnio().toString(), 7) + "|");
-            }
-            //console.log(auto.getPatente())}
-        });
+    // devuelve una copia del arreglo de todos los autos del registro
+    RAutomotor.prototype.getAutos = function (activo) {
+        return this.autos.filter(function (auto) { return (auto.getActivo() == activo); });
     };
-    // muestra el listado de los autos preguntado por el getActivo
-    RAutomotor.prototype.getListadoAutosBaja = function () {
-        var _this = this;
-        // devuelve listado de autos dados de baja
-        this.autos.forEach(function (auto) {
-            if (!auto.getActivo()) {
-                console.log("| " + _this.igualoCadena(auto.getPatente(), 11) +
-                    "| " + _this.igualoCadena(auto.getMarca(), 13) +
-                    "| " + _this.igualoCadena(auto.getModelo(), 13) +
-                    "| " + _this.igualoCadena(auto.getAnio().toString(), 7) + "|");
-            }
-        });
+    RAutomotor.prototype.getAuto = function (patente) {
+        return this.autos.filter(function (auto) { return (auto.getPatente() === patente); });
+    };
+    RAutomotor.prototype.getTransfiereAuto = function (patente, titularActual, titularFuturo) {
+        var autoATransferir = this.getAuto(patente);
+        autoATransferir[0].setHistorico(titularActual, titularFuturo); // transfiero datos al historico del auto
     };
     // alta de un vehiculo
     RAutomotor.prototype.setAltaAuto = function (altaAuto) {
@@ -73,11 +57,6 @@ var RAutomotor = /** @class */ (function () {
             return false;
         }
         return true;
-    };
-    RAutomotor.prototype.igualoCadena = function (cadena, largo) {
-        var largoCadena = cadena.length;
-        var cadenaNormalizada = cadena.padEnd(largo, " ");
-        return cadenaNormalizada;
     };
     return RAutomotor;
 }());

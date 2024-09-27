@@ -18,6 +18,12 @@ var Automovil = /** @class */ (function () {
     Automovil.prototype.setPatente = function (value) {
         this.patente = value;
     };
+    Automovil.prototype.setHistorico = function (titularActual, titularFuturo) {
+        var transferidoHoy = new Date;
+        var fechaTransferencia = transferidoHoy.getUTCDate().toString() + "/" + transferidoHoy.getUTCMonth().toString() + "/" + transferidoHoy.getUTCFullYear().toString();
+        this.historico.push({ estado: "transferido", titular: titularActual, fecha: fechaTransferencia });
+        this.titular = titularFuturo;
+    };
     Automovil.prototype.getMarca = function () {
         return this.marca;
     };

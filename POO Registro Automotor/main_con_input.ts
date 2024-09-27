@@ -1,5 +1,5 @@
 import { Automovil } from "./Automovil";
-import rls from "readline-sync";
+import readline from "readline-sync";
 //import colors from "colors";
 
 //let auto = new Automovil("AE228EW","Volkswagen","Tiguan",2020);
@@ -28,16 +28,16 @@ let marcaAuto : string;
 let modeloAuto : string;
 let anioAuto : number;
 
-patenteAuto = rls.question("Ingrese la patente del auto: ");
-marcaAuto = rls.question("Ingrese la marca del auto:");
-modeloAuto = rls.question("Ingrese el modelo del auto:");
-anioAuto = rls.questionInt("Ingrese el anio de fabricación:");
+patenteAuto = readline.question("Ingrese la patente del auto: ");
+marcaAuto = readline.question("Ingrese la marca del auto:");
+modeloAuto = readline.question("Ingrese el modelo del auto:");
+anioAuto = readline.questionInt("Ingrese el anio de fabricación:");
 
 if(!formatoPatente.test(patenteAuto) || anioAuto < 1800 || anioAuto > anioActual) { 
     console.log("los datos ingresados no son válidos");
     return false;}
 
-let nuevoAuto = new Automovil(patenteAuto,marcaAuto,modeloAuto,anioAuto);
+let nuevoAuto = new Automovil(patenteAuto,marcaAuto,modeloAuto,anioAuto,"");
 return true;
 
 }
