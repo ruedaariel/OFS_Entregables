@@ -1,10 +1,13 @@
 import { Automovil } from "./Automovil";
+import { RAutomotor } from "./RegistroAutomotor";
 import { Motocicleta } from "./Motocicleta";
 import { Camion } from "./Camion";
-import { RAutomotor } from "./RegistroAutomotor";
 
 import "colors";
-import { blue } from "colors";
+import { Console } from "console";
+
+
+
 
 let auto = new Automovil("AE228EW","Volkswagen","Tiguan",2020,"Juan Perez");
 let auto1 = new Automovil("AB748EW","Renault","Kangoo",2019,"Pedro Gomez");
@@ -12,9 +15,6 @@ let auto2 = new Automovil("AE324QV","Volkswagen","Vento",2016,"Ariel Rueda")
 
 
 let RAutomotorNro2 = new RAutomotor("2","Olavarria");
-
-//console.log(RAutomotorNro2.getCiudad());
-
 
 
 console.clear();
@@ -44,12 +44,22 @@ console.log(`El registro automotor Nro. ${RAutomotorNro2.getNro().yellow} de la 
 console.log(" ");
 
 
-console.log("*** Metodo alta de vehiculo en registro Automotor                                    ***".red);
-console.log("*** metodos => RAutomotor.getSetAltaAuto (Auto) devuelve True (exito) False(fracaso) ***".red);
-console.log(`El resultado de dar de alta el auto de patente ${auto.getPatente().yellow} fue ` + `${RAutomotorNro2.setAltaAuto(auto)}`.blue + ` se dio de alta`);
-console.log(`El resultado de dar de alta el auto de patente ${auto1.getPatente().yellow} fue ` + `${RAutomotorNro2.setAltaAuto(auto1)}`.blue + ` se dio de alta`);
-console.log(`El resultado de dar de alta el auto de patente ${auto2.getPatente().yellow} fue ` + `${RAutomotorNro2.setAltaAuto(auto2)}`.blue + ` se dio de alta`);
-console.log(`El resultado de dar de alta el auto de patente ${auto1.getPatente().yellow} ya existente fue ` + `${RAutomotorNro2.setAltaAuto(auto1)}`.red + `  no se dio de alta`);
+console.log("*** Metodo alta de vehiculo en registro Automotor                           ***".red);
+console.log("*** metodo => RAutomotorNro2.setAltaAuto(patente,marca,modelo,anio,titular) ***".red); 
+console.log("*** devuelve True (exito) False(fracaso)                                    ***".red);
+
+let creoAuto  = RAutomotorNro2.setAltaAuto("AE248EW","Volkswagen","Tiguan",2020,"Juan Perez");
+let creoAuto1 = RAutomotorNro2.setAltaAuto("AB748EW","Renault","Kangoo",2019,"Pedro Gomez");
+let creoAuto2 = RAutomotorNro2.setAltaAuto("AE324QV","Volkswagen","Vento",2016,"Ariel Rueda");
+let creoAuto3 = RAutomotorNro2.setAltaAuto("AE324QV","Volkswagen","Vento",2016,"Ariel Rueda");
+let creoAuto4 = RAutomotorNro2.setAltaAuto("AA324AZ","Volkswagen","Polo",2016,"Miguel Beltran");
+let creoAuto5 = RAutomotorNro2.setAltaAuto("AG222BC","Ford","Ranger",2024,"Willi Alonso");
+
+
+console.log("El resultado de dar de alta el auto de patente " + "AE228EW".yellow + " fue " + `${creoAuto}`.blue + ` se dio de alta`);
+console.log("El resultado de dar de alta el auto de patente " + "AB748EW".yellow + " fue " + `${creoAuto1}`.blue + ` se dio de alta`);
+console.log("El resultado de dar de alta el auto de patente " + "AE324QV".yellow + " fue " + `${creoAuto2}`.blue + ` se dio de alta`);
+console.log("El resultado de dar de alta el auto de patente " + "AE324QV ya existente".yellow + " fue " + `${creoAuto3}`.blue + ` no se dio de alta`);
 console.log(" ");
 
 console.log("*** Metodo listado de vehiculos en registro Automotor activos               ***".red);
@@ -60,11 +70,12 @@ console.log("| Patente    | Marca        | Modelo       | Anio   |".cyan);
 muestraListadoAutos(true, RAutomotorNro2);
 
 console.log(" ");
-console.log("*** Metodo baja de vehiculo en registro Automotor establece atributo en False    ***".red);
-console.log("*** metodos => RAutomotor.getBajaAuto(Auto) devuelve True (exito) False(fracaso) ***");
+console.log("*** Metodo baja de vehiculo en registro Automotor establece atributo en False           ***".red);
+console.log("*** metodos => RAutomotor.getBajaAuto(patenteAuto) devuelve True (exito) False(fracaso) ***".red);
 console.log(" ");
-console.log(`El resultado de dar de baja el auto de patente ${auto1.getPatente().yellow} fue ` + `${RAutomotorNro2.setBajaAuto(auto1)}`.blue + ` se dio de baja`);
-console.log(`Compruebo el atributo Activo del vehículo ${auto1.getPatente().yellow} dado de baja y el estado es ` + `${auto1.getActivo().toString().blue}`);
+
+
+console.log("El resultado de dar de baja el auto de patente " + "AE324QV".yellow + " fue "+ `${RAutomotorNro2.setBajaAuto("AE324QV")}`.blue + ` se dio de baja`);
 console.log(" ");
 
 console.log("*** Ejecutamos nuevamente listado de autos para verificar la baja          ***".red);
@@ -85,35 +96,47 @@ muestraListadoAutos(false, RAutomotorNro2);
 console.log(" ");
 
 console.log("*** Busdo todos los datos de un auto                       ***".red);
-console.log("*** usa la funcion auto.getAuto(patente): Automovil[] )    ***".red);
+console.log("*** usa la funcion RAutomotorNro2.getAuto(patenteABuscar)  ***".red);
 console.log(" ");
-let autoABuscar = auto;
-let autoBuscado= RAutomotorNro2.getAuto(autoABuscar.getPatente());
+
+let patenteABuscar = "AB748EW";
+let autoBuscado= RAutomotorNro2.getAuto(patenteABuscar);
 
 // si la longitud del arreglo devuelto es 0 significa que el vehículo no esta en la base
 // por contrario la respuesta será un arreglo con un sólo elemento
+
 if (autoBuscado.length == 0){ 
-    console.log(`El auto con patente ${autoABuscar.getPatente().yellow} no esta en este Registro Automotor`);}
-else console.log(autoBuscado);         
+    console.log("El auto con patente " + `${patenteABuscar.yellow}` + " no esta en este Registro Automotor");}
+else console.log(autoBuscado[0]);         
 
 
 console.log("*** metodo para transferir un auto de un titular a otro. Usa la función                     ***".red);
 console.log("*** RegistroAutomotor-getTransfiereAuto(patente,titularActual,titularFuturo): Automovil[] ) ***".red);
 console.log(" ");
 
-RAutomotorNro2.getTransfiereAuto("AE228EW","Pedro Gomez","Ariel Rueda"); // lo transfiero una vez
-RAutomotorNro2.getTransfiereAuto("AE228EW","Ariel Rueda","Gladys Herrera");// lo transfiero una segunda vez
+
+// verifica si la transferencia funciona para un auto que no existe o esta dado de baja
+console.log("***  Intento transferir una auto que esta dado de baja  ***".red);
+let seTransfirio : boolean = RAutomotorNro2.getTransfiereAuto("AE324QV","Pedro Gomez","Ariel Rueda"); // lo transfiero una vez
+
+if (!seTransfirio) {console.log ("El auto con patente " + "AE324QV".yellow + " no existe o esta dado de baja" )} 
+
+console.log(" ");
+
+// transfiero uno que si existe
+RAutomotorNro2.getTransfiereAuto("AG222BC","Ariel Rueda","Willi Alonso");// lo transfiero una segunda vez
+RAutomotorNro2.getTransfiereAuto("AG222BC","Willi Alonso","Gladys Herrera");// lo transfiero una segvunda vez
 
 console.log("*** el objeto auto tiene un atributo que va registrando su historia de ***".red);
 console.log("*** transferencias lo podemos ver con el metodo auto.getHistorico()    ***".red);
 console.log(" ");
 
-let autoTransferido = RAutomotorNro2.getAuto("AE228EW");
-const historiaVehiculo = autoTransferido[0].getHistorico();
+let autoTransferido = RAutomotorNro2.getAuto("AG222BC");
+
+
+console.log ("El historico del auto de patente: " + "AG222BC".yellow + " es el seguiente:")
+let historiaVehiculo = RAutomotorNro2.getHistoricoAuto("AG222BC");
 console.log(historiaVehiculo);
-
-
-
 
 
 
